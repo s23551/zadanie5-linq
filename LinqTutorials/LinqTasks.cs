@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace LinqTutorials
 {
@@ -197,7 +198,7 @@ namespace LinqTutorials
         /// </summary>
         public static int Task3()
         {
-            int result = 0;
+            int result = Emps.Max(e => e.Salary);
             return result;
         }
 
@@ -206,7 +207,7 @@ namespace LinqTutorials
         /// </summary>
         public static IEnumerable<Emp> Task4()
         {
-            IEnumerable<Emp> result = null;
+            IEnumerable<Emp> result = Emps.Where(e => e.Salary == Emps.Max(emp => emp.Salary));
             return result;
         }
 
@@ -215,7 +216,11 @@ namespace LinqTutorials
         /// </summary>
         public static IEnumerable<object> Task5()
         {
-            IEnumerable<object> result = null;
+            IEnumerable<object> result = Emps.Select(e =>
+            new {
+                Nazwisko = e.Ename,
+                Praca = e.Job
+            }).ToList();
             return result;
         }
 
@@ -226,7 +231,15 @@ namespace LinqTutorials
         /// </summary>
         public static IEnumerable<object> Task6()
         {
-            IEnumerable<object> result = null;
+            IEnumerable<object> result = Emps.Join(Depts,
+                e => e.Deptno,
+                d => d.Deptno,
+                (e, d) => new
+                {
+                    Ename = e.Ename,
+                    Job = e.Job,
+                    Dname = d.Dname
+                }).ToList();
             return result;
         }
 
@@ -235,7 +248,13 @@ namespace LinqTutorials
         /// </summary>
         public static IEnumerable<object> Task7()
         {
-            IEnumerable<object> result = null;
+            IEnumerable<object> result = Emps.GroupBy(e => e.Job)
+                .Select(g =>
+                new
+                {
+                    Praca = g.Key,
+                    LiczbaPracownikow = g.Count()
+                }).ToList();
             return result;
         }
 
@@ -245,7 +264,7 @@ namespace LinqTutorials
         /// </summary>
         public static bool Task8()
         {
-            bool result = false;
+            bool result = Emps.Any(e => e.Job == "Backend programmer");
             return result;
         }
 
