@@ -274,7 +274,7 @@ namespace LinqTutorials
         /// </summary>
         public static Emp Task9()
         {
-            Emp result = null;
+            Emp result = Emps.Where(e => e.Job == "Backend programmer").OrderByDescending(e => e.HireDate).First();
             return result;
         }
 
@@ -302,7 +302,13 @@ namespace LinqTutorials
         /// </summary>
         public static IEnumerable<object> Task11()
         {
-            IEnumerable<object> result = null;
+            IEnumerable<object> result = Depts.Join(Emps,
+                d => d.Deptno,
+                e => e.Deptno,
+                (d, e) => new
+                {
+                    name = e.Job
+                });
             return result;
         }
 
